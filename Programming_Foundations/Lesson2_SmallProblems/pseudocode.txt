@@ -1,0 +1,40 @@
+Create a method that returs the sum of two integers
+
+Name the method and have it's input be two integers
+add two integers together
+end 
+
+START 
+SET method as sum(x, y)
+PRINT x+y
+END
+
+Create a method takes an array of strings, and returns a string that is all those strings concatenated together
+
+START 
+given a collections of strings in an array called array_of_string
+SET method as stringy(array_of_string)
+SET output_string = ''
+iterate over each string within the array and add to output_string
+PRINT output_string
+END
+
+Create a method that takes an array of integers and returns a new array with every other element
+
+define the new array output as output = [] 
+iterate over the array of integers and add the even indexed values to the output
+return output
+
+START
+given an array of integers called array
+SET output = []
+SET index = 0
+array.each do |num|
+  if index.even?
+    add num to output 
+  elsif index.zero?
+    add num to ouput
+  end 
+  output
+END
+
