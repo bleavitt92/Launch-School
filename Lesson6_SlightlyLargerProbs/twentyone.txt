@@ -1,0 +1,40 @@
+You start with a normal 52-card deck 
+--4 suits (hearts, diamonds, clubs, and spades)
+--13 values (2, 3, 4, 5, 6, 7, 8, 9, 10, jack, queen, king, ace).
+
+Goal: get as close to 21 as possible
+--don't go over - that's a bust and you lose 
+
+Have a "dealer" and a "player". 
+--Initial setup: 2 cards each (can see own cards and one of dealer's cards)
+
+Card values: all of the card values are pretty straightforward, except for the ace. 
+--2 through 10 are worth their face value. 
+--jack, queen, and king are each worth 10
+--ace can be worth 1 or 11. 
+----The ace's value is determined each time a new card is drawn from the deck. 11 unless bust then 1.
+------be careful if have multiple aces!
+
+Game play: 
+-player first: hit or stay
+ - hit = another card
+ - make sure didn't bust
+ - turn over if bust or stay
+-dealer's turn: hits until total is at least 17, then stays
+
+Pseudo Code: 
+1. Initialize deck
+2. Deal cards to player and dealer
+3. Player turn: hit or stay
+  - repeat until bust or "stay"
+4. If player bust, dealer wins.
+5. Dealer turn: hit or stay
+  - repeat until total >= 17
+6. If dealer bust, player wins.
+7. Compare cards and declare winner.
+
+Tricky Parts
+1. Figure out a data structure to contain the "deck" and the "player's cards" and "dealer's cards". Maybe a hash? An array? A nested array? Your decision will have consequences throughout your code, but don't be afraid of choosing the wrong one. Play around with an idea, and see how far you can push it. If it doesn't work, back out of it.
+deck = nested array ['2', 'H'] is 2 of hearts
+players_cards = array 
+dealers_cards = array - how to just show 1 card though?
