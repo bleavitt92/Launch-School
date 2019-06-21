@@ -38,3 +38,6 @@ Tricky Parts
 deck = nested array ['2', 'H'] is 2 of hearts
 players_cards = array 
 dealers_cards = array - how to just show 1 card though?
+
+problem cases: 
+hand: J, A, A, K

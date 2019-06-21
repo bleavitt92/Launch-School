@@ -103,7 +103,7 @@ loop do
   prompt("Dealer has: #{card_shown[0]} and an unknown card.")
 
   prompt("It's your turn!")
-
+# player's loop 
   loop do
     break if busted?(player_hand) || twenty_one?(player_hand)
     prompt("'h' for hit, 's' for stay: ")
@@ -120,15 +120,24 @@ loop do
   else
     prompt("You chose to stay!")
   end
+  puts "-----------------------"
 
+# dealer's turn
   unless busted?(player_hand)
     puts "Dealer's turn now"
-    sleep(1)
+
     loop do
-      break if dealer_done?(dealer_hand)
+      prompt("Dealer's score is currently: #{sum_cards(dealer_hand)}")
+      if dealer_done?(dealer_hand)
+        puts "Dealer is staying..."
+        break
+      end 
+      prompt("Dealer hits...")
       deal_card(deck, dealer_hand)
       cards_left!(deck, dealer_hand)
     end
+
+    puts "-----------------------------"
     prompt("Your score: #{sum_cards(player_hand)}")
     prompt("Dealer score: #{sum_cards(dealer_hand)} ")
   end
@@ -138,3 +147,5 @@ loop do
   answer = gets.chomp
   break unless answer.downcase.start_with?('y')
 end
+
+prompt("Thanks for playing!")

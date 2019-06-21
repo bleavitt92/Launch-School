@@ -1,3 +1,15 @@
+
+def name
+  puts "George"
+end
+
+name = "Lisa"
+
+loop do
+  puts name
+  break
+end
+
 def car(new_car)
   make = make(new_car)
   model = model(new_car)
