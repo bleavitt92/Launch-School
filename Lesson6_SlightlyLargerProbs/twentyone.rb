@@ -1,4 +1,5 @@
-require 'pry'
+BLACK_JACK = 21
+
 def prompt(msg)
   puts "=> #{msg}"
 end
@@ -6,7 +7,8 @@ end
 def initialize_deck
   new_deck = []
   suits = ['H', 'D', 'S', 'C']
-  cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+  cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen',
+           'King', 'Ace']
   suits.each do |suit|
     cards.each do |card|
       new_deck << [card, suit]
@@ -15,37 +17,42 @@ def initialize_deck
   new_deck
 end
 
-def cards_left!(dck, hand)
-  dck.keep_if { |card| !hand.include?(card) }
+def initialize_score
+  new_score = { "Player" => 0, "Dealer" => 0 }
+  new_score
 end
 
-def initial_deal_cards(dck)
+def update_cards_left!(carddeck, hand)
+  carddeck.keep_if { |card| !hand.include?(card) }
+end
+
+def initial_deal_cards(carddeck)
   hand = []
-  2.times { hand << dck.sample }
+  2.times { hand << carddeck.sample }
   hand
 end
 
-def deal_card(dck, hand)
-  hand << dck.sample
+def deal_card(carddeck, hand)
+  hand << carddeck.sample
 end
 
 def show_cards(hand)
-  nums = []
+  num_of_card = []
   print "=> You have: "
-  hand.each { |card| nums << card[0] }
-  case nums.size
+  hand.each { |card| num_of_card << card[0] }
+  case num_of_card.size
   when 2
-    puts nums.join(' and ')
+    puts num_of_card.join(' and ')
   else
-    nums[-1] = 'and ' + nums[-1]
-    puts nums.join(", ")
+    num_of_card[-1] = 'and ' + num_of_card[-1]
+    puts num_of_card.join(", ")
   end
 end
 
 def sum_cards(hand)
   sum = 0
   hand.each do |card|
-    if card[0] == "A"
+    if card[0] == 'Ace'
       sum += 11
     elsif card[0].to_i == 0
       sum += 10
@@ -54,98 +61,133 @@ def sum_cards(hand)
     end
   end
 
-  if sum > 21
-    hand.select { |card| card[0] == 'A' }.count.times do
-      sum -= 10 if sum > 21
-    end
+  hand.select { |card| card[0] == 'Ace' }.count.times do
+    sum -= 10 if sum > BLACK_JACK
   end
 
   sum
 end
 
-def busted?(hand)
-  sum_cards(hand) > 21
+def busted?(tot)
+  tot > BLACK_JACK
 end
 
-def twenty_one?(hand)
-  sum_cards(hand) == 21
+def twenty_one?(tot)
+  tot == BLACK_JACK
 end
 
-def dealer_done?(hand)
-  sum_cards(hand) >= 17
+def dealer_done?(tot)
+  tot >= 17
 end
 
 def who_won?(plyr, dler)
-  if busted?(plyr) || sum_cards(dler) > sum_cards(plyr)
+  if busted?(plyr) || (dler > plyr && !busted?(dler))
     'Dealer'
-  elsif busted?(dler) || sum_cards(plyr) > sum_cards(dler)
+  elsif busted?(dler) || plyr > dler
     'Player'
   else
     "It's a tie, no-one"
   end
 end
 
+def play_again?
+  puts '________________'
+  prompt("Do you want to play again? (y or n)")
+  answer = gets.chomp
+  answer.downcase.start_with?('y')
+end
+
 # main game loop
+score = initialize_score
 loop do
   system 'clear'
   deck = initialize_deck
 
   player_hand = initial_deal_cards(deck)
   show_cards(player_hand)
-  sum_cards(player_hand)
-
-  cards_left!(deck, player_hand)
+  player_total = sum_cards(player_hand)
+  update_cards_left!(deck, player_hand)
+  sleep(0.5)
 
   dealer_hand = initial_deal_cards(deck)
-  cards_left!(deck, dealer_hand)
+  dealer_total = sum_cards(dealer_hand)
+  update_cards_left!(deck, dealer_hand)
 
   card_shown = dealer_hand.sample
   prompt("Dealer has: #{card_shown[0]} and an unknown card.")
+  sleep(0.5)
 
   prompt("It's your turn!")
-# player's loop 
+  # player's loop
   loop do
-    break if busted?(player_hand) || twenty_one?(player_hand)
+    player_total = sum_cards(player_hand)
+    break if busted?(player_total) || twenty_one?(player_total)
     prompt("'h' for hit, 's' for stay: ")
     decision = gets.chomp.downcase
-    sum_cards(player_hand)
     break if decision == 's'
     deal_card(deck, player_hand)
     show_cards(player_hand)
-    cards_left!(deck, player_hand)
+    update_cards_left!(deck, player_hand)
   end
 
-  if busted?(player_hand)
+  if busted?(player_total)
     prompt("You busted!")
+  elsif twenty_one?(player_total)
+    prompt("You got #{BLACK_JACK}!")
   else
     prompt("You chose to stay!")
   end
-  puts "-----------------------"
 
-# dealer's turn
-  unless busted?(player_hand)
+  sleep(1)
+  puts "-----------------------"
+  sleep(0.5)
+  # dealer's turn
+  unless busted?(player_total) || twenty_one?(player_total)
     puts "Dealer's turn now"
+    sleep(1)
 
     loop do
-      prompt("Dealer's score is currently: #{sum_cards(dealer_hand)}")
-      if dealer_done?(dealer_hand)
+      prompt("Dealer's score is currently: #{dealer_total}")
+      sleep(0.5)
+      if dealer_done?(dealer_total)
         puts "Dealer is staying..."
         break
-      end 
+      end
       prompt("Dealer hits...")
       deal_card(deck, dealer_hand)
-      cards_left!(deck, dealer_hand)
+      dealer_total = sum_cards(dealer_hand)
+      if busted?(dealer_total)
+        prompt("Dealer Busted!")
+        break
+      end
+      update_cards_left!(deck, dealer_hand)
     end
 
-    puts "-----------------------------"
-    prompt("Your score: #{sum_cards(player_hand)}")
-    prompt("Dealer score: #{sum_cards(dealer_hand)} ")
+    dealer_total = sum_cards(dealer_hand)
+    player_total = sum_cards(player_hand)
+
+    unless busted?(dealer_total)
+      puts "-----------------------------"
+      prompt("Your total: #{player_total}")
+      prompt("Dealer total: #{dealer_total}")
+    end
   end
 
-  prompt("#{who_won?(player_hand, dealer_hand)} won!")
-  prompt("Play again?")
-  answer = gets.chomp
-  break unless answer.downcase.start_with?('y')
+  if who_won?(player_total, dealer_total) == 'Player'
+    score['Player'] += 1
+  elsif who_won?(player_total, dealer_total) == 'Dealer'
+    score['Dealer'] += 1
+  end
+
+  prompt("#{who_won?(player_total, dealer_total)} won!")
+  sleep(1)
+  prompt("The score is: Player:#{score['Player']} Dealer:#{score['Dealer']}")
+  if score.values.include?(5)
+    prompt("#{who_won?(player_total, dealer_total)} made it to 5! Game over.")
+    break
+  end
+  sleep(0.5)
+  break unless play_again?
 end
 
 prompt("Thanks for playing!")
