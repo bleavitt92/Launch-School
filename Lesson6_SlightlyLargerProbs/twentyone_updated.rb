@@ -43,7 +43,7 @@ def show_cards(hand)
     puts "#{num_of_card.join(' and ')} for a sum of #{sum_cards(hand)}"
   else
     num_of_card[-1] = 'and ' + num_of_card[-1]
-    puts "#{num_of_card.join(',')} for a sum of #{sum_cards(hand)}"
+    puts "#{num_of_card.join(', ')} for a sum of #{sum_cards(hand)}"
   end
 end
 
@@ -121,6 +121,43 @@ def hit_or_stay
   end
 end
 
+def player_turn(carddeck, hand, plyr)
+  loop do
+    plyr = sum_cards(hand)
+    break if busted?(plyr) || twenty_one?(plyr)
+    decision = hit_or_stay
+    break if decision == 'stay'
+    prompt("Hit!")
+    pause
+    deal_cards(carddeck, hand)
+    print "Your cards: "
+    show_cards(hand)
+    pause
+  end
+end
+
+def dealer_play(carddeck, hand, dler)
+  loop do
+    print "Dealer's cards: "
+    show_cards(hand)
+    dler = sum_cards(hand)
+    pause
+    break if dealer_done?(dler) || busted?(dler)
+    prompt("Dealer hits...")
+    pause
+    deal_cards(carddeck, hand)
+  end
+end
+
+def display_scores(plyr, dler)
+  pause
+  dividing_line
+  prompt("Your total: #{plyr}")
+  pause(1)
+  prompt("Dealer total: #{dler}")
+  pause(1)
+end
+
 # main game loop
 prompt("Welcome to Twenty-One!")
 score = initialize_score
@@ -133,6 +170,7 @@ loop do
   prompt("Start Game!")
   pause
   deck = initialize_deck
+
   player_hand = deal_cards(deck, player_hand, 2)
   print "Your cards: "
   show_cards(player_hand)
@@ -141,85 +179,53 @@ loop do
 
   dealer_hand = deal_cards(deck, dealer_hand, 2)
   dealer_total = sum_cards(dealer_hand)
-
   card_shown = dealer_hand.sample
   puts "Dealer has: #{card_shown[0]} and an unknown card."
   pause(2)
-  
-  prompt("It's your turn!")
-  pause
-  # player's loop
-  loop do
-    player_total = sum_cards(player_hand)
-    break if busted?(player_total) || twenty_one?(player_total)
-    decision = hit_or_stay
-    break if decision == 'stay'
-    prompt("Hit!")
-    pause
-    deal_cards(deck, player_hand)
-    print "Your cards: "
-    show_cards(player_hand)
-    pause
-  end
 
-  if busted?(player_total)
+  # player's turn
+  prompt("It's your turn!")
+  player_turn(deck, player_hand, player_total)
+
+  if busted?(sum_cards(player_hand))
     prompt("Busted!")
   elsif twenty_one?(player_total)
     prompt("You got #{BLACK_JACK}!")
   else
     prompt("Stay!")
   end
+  player_total = sum_cards(player_hand)
 
   pause
   dividing_line
   pause
+
   # dealer's turn
   unless busted?(player_total) || twenty_one?(player_total)
     prompt("Dealer's turn now...")
     pause(2)
-
-    loop do
-      print "Dealer's cards: "
-      show_cards(dealer_hand)
-      pause
-      if dealer_done?(dealer_total)
-        puts "Dealer is staying..."
-        pause
-        break
-      end
-      prompt("Dealer hits...")
-      pause
-      deal_cards(deck, dealer_hand)
-      dealer_total = sum_cards(dealer_hand)
-      if busted?(dealer_total)
-        prompt("Dealer Busted!")
-        break
-      end
-    end
-
+    dealer_play(deck, dealer_hand, dealer_total)
     dealer_total = sum_cards(dealer_hand)
-    player_total = sum_cards(player_hand)
+
+    if busted?(dealer_total)
+      prompt("Dealer Busted!")
+    elsif dealer_done?(dealer_total)
+      prompt("Dealer is staying...")
+    end
+    pause
 
     unless busted?(dealer_total)
-      pause
-      dividing_line
-      prompt("Your total: #{player_total}")
-      pause(1)
-      prompt("Dealer total: #{dealer_total}")
-      pause(1)
+      display_scores(player_total, dealer_total)
     end
-  end
-
-  if who_won?(player_total, dealer_total) == 'Player'
-    score['Player'] += 1
-  elsif who_won?(player_total, dealer_total) == 'Dealer'
-    score['Dealer'] += 1
   end
 
   dividing_line
+  score[who_won?(player_total, dealer_total)] += 1
+
   prompt("#{who_won?(player_total, dealer_total)} won!")
   pause
   prompt("The score is: Player:#{score['Player']} Dealer:#{score['Dealer']}")
+
   if score.values.include?(5)
     prompt("#{who_won?(player_total, dealer_total)} made it to 5! Game over.")
     break
