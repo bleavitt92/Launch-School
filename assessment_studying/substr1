@@ -1,0 +1,30 @@
+
+[1mFrom:[0m /home/ec2-user/environment/Programming_Foundations/assessment_studying/study_group.rb @ line 26 Object#substring_test:
+
+    [1;34m11[0m: [32mdef[0m [1;34msubstring_test[0m(str1, str2)
+    [1;34m12[0m:   result = []
+    [1;34m13[0m:   substrings1 = []
+    [1;34m14[0m:   [1;34m0[0m.upto(str1.length-[1;34m1[0m) [32mdo[0m |index|
+    [1;34m15[0m:     substrings1 << str1[index..str1.length-[1;34m1[0m]
+    [1;34m16[0m:   [32mend[0m 
+    [1;34m17[0m: 
+    [1;34m18[0m:   substrings2 = []
+    [1;34m19[0m:   [1;34m0[0m.upto(str2.length-[1;34m1[0m) [32mdo[0m |index|
+    [1;34m20[0m:     substrings2 << str2[index..str2.length-[1;34m1[0m]
+    [1;34m21[0m:   [32mend[0m 
+    [1;34m22[0m: 
+    [1;34m23[0m:   substrings1.each [32mdo[0m |substr1|
+    [1;34m24[0m:     substrings2.each [32mdo[0m |substr2|
+    [1;34m25[0m:       binding.pry
+ => [1;34m26[0m:       [32mif[0m substr1.downcase == substr2.downcase
+    [1;34m27[0m:         [1;36mtrue[0m
+    [1;34m28[0m:       [32melse[0m
+    [1;34m29[0m:         [32mnext[0m
+    [1;34m30[0m:       [32mend[0m 
+    [1;34m31[0m:     [32mend[0m 
+    [1;34m32[0m:   [32mend[0m 
+    [1;34m33[0m:     [1;34m# if substrings2.include?(substr)[0m
+    [1;34m34[0m:     [1;34m#   puts "yes it includes a substring!"[0m
+    [1;34m35[0m:     [1;34m# end [0m
+    [1;34m36[0m: [32mend[0m
+

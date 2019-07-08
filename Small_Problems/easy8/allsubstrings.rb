@@ -2,23 +2,42 @@
 
 #You may (and should) use the substrings_at_start method you wrote in the previous exercise:
 
-#take the string and loop through each 1 up to the length of the string. define another string for the moment as start to -1 [this index .. -1]
-
-def substrings_start(string)
-  begin_substrings = [] 
-  1.upto(string.length) do |index|
-    begin_substrings << string[0, index]
-  end 
-  begin_substrings
-end 
-
 def substrings(string)
   result = []
-  0.upto(string.length-1) do |this_index| 
-    this_string = string[this_index..-1]
-   result <<  substrings_start(this_string)
-  end 
+  0.upto(string.size-1) do |index1|
+    index1.upto(string.size-1) do |index2|
+      result << string[index1..index2]
+    end 
+  end
   result
-end 
+end
 
 p substrings('abcd')
+p substrings('abcde') == [
+  'a', 'ab', 'abc', 'abcd', 'abcde', 
+  'b', 'bc', 'bcd', 'bcde',
+  'c', 'cd', 'cde',
+  'd', 'de',
+  'e'
+]
+
+
+#take the string and loop through each 1 up to the length of the string. define another string for the moment as start to -1 [this index .. -1]
+
+# def substrings_start(string)
+#   begin_substrings = [] 
+#   1.upto(string.length) do |index|
+#     begin_substrings << string[0, index]
+#   end 
+#   begin_substrings
+# end 
+
+# def substrings(string)
+#   result = []
+#   0.upto(string.length-1) do |this_index| 
+#     this_string = string[this_index..-1]
+#   result <<  substrings_start(this_string)
+#   end 
+#   result
+# end 
+

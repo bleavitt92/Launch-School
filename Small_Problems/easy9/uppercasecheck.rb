@@ -4,6 +4,21 @@
 #output: boolean - true if all are uppercase. false otherwise. ignore non alphabetic characters
 
 def uppercase?(string)
+  string.chars.all? do |char|
+    char.match(/[A-Z]/)
+  end 
+end
+
+p uppercase?('HEY')
+
+
+
+
+
+
+
+
+def uppercase?(string)
    string == string.upcase
  end 
 

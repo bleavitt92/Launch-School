@@ -13,6 +13,85 @@
 
 #With 10 lights, 3 lights are left on: lights 1, 4, and 9. The return value is [1, 4, 9].
 
+def initiate_hash(n)
+  hash = Hash.new
+  (1..n).each { |num| hash[num] = 0 }
+  hash
+end
+
+def lightswitch(number)
+  switches = initiate_hash(number)
+  switches.each do |k, v|
+    (1..number).each do |num|
+      if k % num == 0
+        switches[k] += 1
+      end 
+    end
+  end
+  switches.each do |k, v|
+    if v.odd?
+      switches[k] = 'on'
+    else
+      switches[k] = 'off'
+    end 
+  end
+    switches
+end
+
+p lightswitch(5)
+
+
+
+
+
+
+
+
+
+
+
+
+# set switch to false initially
+# set counter = 1
+# create an array of numbers from 1 to n
+# iterate over the array using map
+  # if the number can be divided evenly by the counter, change switch = !switch
+
+# def initialize_lights(number_of_lights)
+#   lights = Hash.new
+#   1.upto(number_of_lights) { |number| lights[number] = "off" }
+#   lights
+# end
+
+# def toggle_nth_light(lights, n)
+#   lights.each do |position, state|
+#     if position % n == 0
+#       if lights[position] == 'off'
+#         lights[position] = 'on'
+#       else
+#         lights[position] = 'off'
+#       end 
+#     end 
+#   end
+# end
+
+# def lightswitch(number)
+#   switches = initialize_lights(number)
+#   1.upto(number) do |n|
+#     toggle_nth_light(switches, n)
+#   end 
+#   switches
+# end
+
+# p lightswitch(6)
+
+
+
+
+
+
+
+
 #input: integer, n, for number of switches
 #output: array - which numbered light switches are on
 #all lights off -- if the switch gets touched an odd number of times it is on, even number of times it is off.
@@ -21,41 +100,41 @@
   # create an empty hash and on the first run, add each numbered light switch 1..n as keys and then a '1' as a value. Each time the loop goes through, add '1' to the value
     #at the end, the values being odd or even determine which keys go into the final array
 
-def multiples(x, n)
-  multiples_array = []
-  m = 1
-  loop do
-    multiples_array << x*m
-    m +=1 
-   if x*m >= n
-     break
-   end 
-  end 
-  multiples_array
-end 
+# def multiples(x, n)
+#   multiples_array = []
+#   m = 1
+#   loop do
+#     multiples_array << x*m
+#     m +=1 
+#   if x*m >= n
+#     break
+#   end 
+#   end 
+#   multiples_array
+# end 
 
-def lightswitch(n)
-  hash = {} 
-  1.upto(n) do |n|
-    hash[n]=1         #creates the hash with every light switch now on
-  end 
-  run = 2
-  while run <= n do   #create multiples method and iterate over each multiple
-    multiples_array = multiples(run, n)
-    multiples_array.each do |num|
-      hash[num] +=1               #adding 1 to the specified key value pairs
-    end 
-    run +=1
-  end             #odd value in hash means on
-  on_lights = []
-  hash.each do |k, v|
-    if v.odd? 
-      on_lights << k
-    end 
-  end 
-  on_lights
-end 
+# def lightswitch(n)
+#   hash = {} 
+#   1.upto(n) do |n|
+#     hash[n]=1         #creates the hash with every light switch now on
+#   end 
+#   run = 2
+#   while run <= n do   #create multiples method and iterate over each multiple
+#     multiples_array = multiples(run, n)
+#     multiples_array.each do |num|
+#       hash[num] +=1               #adding 1 to the specified key value pairs
+#     end 
+#     run +=1
+#   end             #odd value in hash means on
+#   on_lights = []
+#   hash.each do |k, v|
+#     if v.odd? 
+#       on_lights << k
+#     end 
+#   end 
+#   on_lights
+# end 
 
-p lightswitch(5)
-p lightswitch(10)
-p lightswitch(1000) == [1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324, 361, 400, 441, 484, 529, 576, 625, 676, 729, 784, 841, 900, 961]
+# p lightswitch(5)
+# p lightswitch(10)
+# p lightswitch(1000) == [1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324, 361, 400, 441, 484, 529, 576, 625, 676, 729, 784, 841, 900, 961]

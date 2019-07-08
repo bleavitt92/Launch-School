@@ -2,6 +2,18 @@
 
 #Create a simple mad-lib program that prompts for a noun, a verb, an adverb, and an adjective and injects those into a story that you create.
 
+puts "Enter a noun:"
+noun = gets.chomp
+puts "Enter a verb:"
+verb = gets.chomp
+puts "Enter an adverb:"
+adverb = gets.chomp
+puts "Enter an adjective:"
+adjective = gets.chomp
+
+puts "The #{adjective} #{noun} #{verb} #{adverb}!"
+
+
 #example: 
 #Enter a noun: dog
 #Enter a verb: walk
@@ -13,13 +25,13 @@
 #output: string
 #use get.chomp to ask user for input. use #{} to use input in the stroy. 
 
-puts "Enter a noun:"
-noun = gets.chomp
-puts "Enter a verb:"
-verb = gets.chomp
-puts "Enter an adjective:"
-adjective = gets.chomp
-puts "Enter an adverb:"
-adverb = gets.chomp
+# puts "Enter a noun:"
+# noun = gets.chomp
+# puts "Enter a verb:"
+# verb = gets.chomp
+# puts "Enter an adjective:"
+# adjective = gets.chomp
+# puts "Enter an adverb:"
+# adverb = gets.chomp
 
-puts "Do you #{verb} your #{adjective} #{noun} #{adverb}?"
+# puts "Do you #{verb} your #{adjective} #{noun} #{adverb}?"

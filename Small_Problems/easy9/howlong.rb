@@ -2,17 +2,36 @@
 
 #You may assume that words in the string are separated by exactly one space, and that any substring of non-space characters is a word.
 
+# input: string
+# output: array
+
+def word_lengths(string)
+  output = []
+  array = string.split(' ')
+  array.map { |word| output << "#{word} #{word.length}" }
+  output
+end
+
+
+p word_lengths('hello you')
+
+
+
+
+
+
+
 #input: string
 #output: array with each word that looks like "word wordlength"
 #use .split(' ') to break the string up to an array of words. Then iterate through each adding each word to a new array along with it's word.length. 
 
-def word_lengths(string)
-  result = []
-  string.split(' ').each do |word|
-    result << word + ' ' + word.length.to_s
-  end 
-  result
-end 
+# def word_lengths(string)
+#   result = []
+#   string.split(' ').each do |word|
+#     result << word + ' ' + word.length.to_s
+#   end 
+#   result
+# end 
 
 p word_lengths('cow sheep chicken')  
 p word_lengths("cow sheep chicken") == ["cow 3", "sheep 5", "chicken 7"]
